@@ -7,7 +7,7 @@ This repository provides the necessary tools and instructions to set up a basic 
 1. [Prerequisites](#prerequisites)
 2. [Download Pan-STARRS Images](#download-pan-starrs-images)
 3. [Generate HiPS Server](#generate-hips-server)
-4. [Generate Multiresolution Images](#generate-multiresolution-images)
+4. [HiPS Update](#hips-update)
 5. [Additional Information](#additional-information)
 
 ## Prerequisites
@@ -70,15 +70,30 @@ java -Xmx16g -jar AladinBeta.jar -hipsgen maxThread=20 in=mastDownload out=HiPS 
   - **CHECKCODE**: Performs a consistency check on the generated HiPS data to ensure files meet specifications and are error-free.
   - **DETAILS**: Provides detailed logging during the generation process, useful for debugging.
 
-## Generate Multiresolution Images
+## HiPS Update
 
-This repository also includes a code called `hips2delight`, which contains the function `fits_cutout`. This function takes the following parameters:
+Updating a HiPS is usually done to add new images without having to completely restart the calculation. Usually you no longer have the original images and you just want to add new ones. The safest method is to create a new HiPS with the new images, and then concatenate it to the original HiPS.
 
-- **Central celestial coordinates** of the image.
-- **HiPS order**.
-- **Size in pixels** of the image to be returned.
+### Concatenation of 2 HiPS
 
-The function returns an HDUList object that characterizes the generated FITS file. This code allows for the generation of multiresolution images required by the DELIGHT algorithm to predict the position of the host galaxy for a given supernova alert.
+Hipsgen allows to concatenate 2 HiPS thanks to the "CONCAT" action. These 2 HiPS must necessarily have the same HiPS order. First, another HiPS server must be generated using the instructions in section 3. Suppose this second HiPS server is generated with the name "HiPS2", and suppose the first generated HiPS server has the name "HiPS". The concatenation is done by integrating the first HiPS into the second. 
+
+To concatenate the "HiPS" server into the "HiPS2" server, open your terminal and navigate to the directory containing the `AladinBeta.jar` file and the `mastDownload2` folder (Assuming this folder contains the new images). Run the following command:
+
+```bash
+java -Xmx16g -jar AladinBeta.jar -hipsgen maxThread=20 in=HiPS out=HiPS2 id=HiPS_C CONCAT CHECKCODE DETAILS
+```
+
+- **Parameters**:
+  - `in=HiPS`: Path name of the first HiPS server generated. This server will be integrated into the second one.
+  - `out=HiPS2`: Path name of the second HiPS server generated. This server will receive the integration of the first one
+  - `id=HiPS_C`: This provides an identification ID for the resulting HiPS server.
+
+- **Flags**:
+  - **CONCAT**: Action that allows the concatenation of the server indicated in the "in" parameter, together with the server indicated in the "out" parameter. The HiPS server indicated in "in" is integrated within the HiPS server indicated in "out".
+  - **CHECKCODE**: Performs a consistency check on the generated HiPS data to ensure files meet specifications and are error-free.
+  - **DETAILS**: Provides detailed logging during the generation process, useful for debugging.
+
 
 ## Additional Information
 
