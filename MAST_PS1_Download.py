@@ -7,7 +7,7 @@ from astroquery.mast import Observations
 
 
 
-def get_observations(collection="PS1", filters_list=["r"], ra_range=[30,35],dec_range=[10, 15]):
+def get_observations(collection="PS1", filters_list=["r"], ra_range=[0, 360],dec_range=[0, 90]):
     """
     Observations are filtered according to the collection, filter,  declination range parameters.
 
@@ -63,7 +63,7 @@ def main():
     Main function to coordinate the program flow.
     """
     # Get the filtered observations
-    products = get_observations(dec_range=[10,10.6])
+    products = get_observations()
 
     if not products:
         print("No products found. The process will terminate.")
@@ -74,7 +74,7 @@ def main():
     print(products[:20])
 
     # Download the products in batches
-    download_products_in_batches(products,batch_size=2)
+    download_products_in_batches(products)
 
     print("Download completed.")
 
