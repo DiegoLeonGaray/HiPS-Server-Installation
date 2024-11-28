@@ -18,13 +18,31 @@ Before you begin, make sure you have the following installed on your machine:
 
 ## Download Pan-STARRS Images
 
-To download the Pan-STARRS images in the r filter, run the following command in your terminal:
+To download Pan-STARRS images, you can use the script `MAST_PS1_Download.py`. The script have two important functions:
+
+- **get_observations(collection="PS1", filters_list=["r"], ra_range=[30, 35],dec_range=[10, 15])**:
+
+  This function filter the observations according to the `collection`, `filter`, `ra_range`, and `dec_range` parameters.
+  - `collection=PS1`: Name of the mission or collection. Default value **"PS1"**.
+  - `filters_list=["r"]`: List of filters to use for the search. Defalut value **["r"]**.
+  - `ra_range=[0, 360]`: Right ascension range [min, max]. Default value **[0, 360]**.
+  - `dec_range=[10, 15]`: Declination range [min, max]. Default value **[0, 90]**.
+
+- **download_products_in_batches(products, batch_size=200)**:
+
+  This function downloads the products in smaller batches to avoid exceeding download limits.
+  - `products`: List of filtered observations products.
+  - `batch_size`: The batch size to download the products in.
+
+  
+
+For example, to download the Pan-STARRS images with default parameters (northern hemisphere observations), run the following command in your terminal:
 
 ```bash
 python MAST_PS1_Download.py
 ```
 
-This script will download all the images sequentially and store them in a folder named `mastDownload`.
+The main function sequentially downloads all images of the northern hemisphere and store them in a folder named `mastDownload`.
 
 ## Generate HiPS Server
 
